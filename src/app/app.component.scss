@@ -48,6 +48,24 @@
   width: 100%;
 }
 
+.result {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  row-gap: 8px;
+  box-sizing: border-box;
+  padding-top: 32px;
+  padding-bottom: 32px;
+  user-select: text;
+}
+
+.result-2 {
+  font-size: 48px;
+  font-weight: 500;
+}
+
 .bottom-banner {
   width: 100%;
   height: 56px;

@@ -12,6 +12,11 @@ import sv from '@angular/common/locales/sv';
 import { registerLocaleData } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 
+interface ConsumerPriceIndexData {
+  fromCpi: number;
+  toCpi: number;
+}
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -35,6 +40,7 @@ export class AppComponent {
     from: new FormControl<Moment | null>({ value: null, disabled: true }, { validators: [Validators.required] }),
     through: new FormControl<Moment | null>({ value: null, disabled: true }, { validators: [Validators.required] }),
   });
+  public consumerPriceIndexData: ConsumerPriceIndexData | null = null;
 
   constructor(private http: HttpClient) {
     moment.locale('sv');
@@ -72,6 +78,8 @@ export class AppComponent {
   }
 
   public handleSubmit() {
+    this.consumerPriceIndexData = null;
+
     const amount = this.formGroup.controls.amount.value!;
     const from = this.formGroup.controls.from.value!;
     const through = this.formGroup.controls.through.value!;
@@ -81,7 +89,46 @@ export class AppComponent {
       return;
     }
 
+    const body = {
+      query: [
+        {
+          code: "ContentsCode",
+          selection: {
+            filter: "item",
+            values: [
+              "000004VU"
+            ]
+          }
+        },
+        {
+          code: "Tid",
+          selection: {
+            filter: "item",
+            values: [
+              `${from.format('YYYY')}M${from.format('MM')}`,
+              `${through.format('YYYY')}M${through.format('MM')}`
+            ]
+          }
+        }
+      ],
+      response: {
+        format: "json"
+      }
 
+    };
+
+    this.http
+      .post('https://api.scb.se/OV0104/v1/doris/sv/ssd/START/PR/PR0101/PR0101A/KPItotM', body, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+        }
+      })
+      .subscribe((response: any) => {
+        this.consumerPriceIndexData = {
+          fromCpi: response.data.at(0).values.at(0),
+          toCpi: response.data.at(1).values.at(0)
+        };
+      });
   }
 
   @HostListener('window:resize', ['$event'])
