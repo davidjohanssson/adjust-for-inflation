@@ -34,6 +34,8 @@
     <div>{{ calculation.amount }} kronor {{ calculation.from.format('MMMM YYYY') }} motsvarar</div>
     <div class="result-text">{{ calculation.result }}</div>
     <div>kronor {{ calculation.through.format('MMMM YYYY') }}</div>
+    } @else {
+      <div class="result-emoji">💸</div>
     }
   </div>
   <div class="bottom-banner">
