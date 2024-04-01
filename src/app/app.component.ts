@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -26,9 +26,10 @@ import { registerLocaleData } from '@angular/common';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+  public isHandset = window.matchMedia('(max-width: 599px)').matches;
   public formGroup = new FormGroup({
     amount: new FormControl<number | null>(null, { validators: [Validators.required, Validators.min(0)] }),
-    from: new FormControl(),
+    from: new FormControl<Moment | null>({ value: null, disabled: true }, { validators: [Validators.required] }),
     // through: new FormControl()
   });
 
@@ -47,5 +48,10 @@ export class AppComponent {
 
   public handleSubmit() {
 
+  }
+
+  @HostListener('window:resize', ['$event'])
+  handleResize() {
+    this.isHandset = window.matchMedia('(max-width: 599px)').matches;
   }
 }
