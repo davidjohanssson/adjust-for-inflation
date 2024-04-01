@@ -134,6 +134,7 @@ export class AppComponent {
           through: through,
           result: Math.round(amount * (throughCpi / fromCpi))
         };
+        this.formGroup.markAsPristine();
       });
   }
 

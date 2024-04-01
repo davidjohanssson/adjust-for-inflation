@@ -26,7 +26,7 @@
       </mat-form-field>
     </div>
     <div class="form-button-container">
-      <button class="form-button" type="submit" mat-raised-button [disabled]="formGroup.invalid">BERÄKNA</button>
+      <button class="form-button" type="submit" mat-raised-button [disabled]="formGroup.invalid || formGroup.pristine">BERÄKNA</button>
     </div>
   </form>
   <div class="result">
