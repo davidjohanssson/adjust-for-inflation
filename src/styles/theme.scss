@@ -1,0 +1,92 @@
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+$gray-darker: (
+  50: #505050,
+  100: #505050,
+  200: #505050,
+  300: #505050,
+  400: #505050,
+  500: #505050,
+  600: #505050,
+  700: #505050,
+  800: #505050,
+  900: #505050,
+  A100: #505050,
+  A200: #505050,
+  A400: #505050,
+  A700: #505050,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #000000,
+    500: #000000,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #000000,
+    A200: #000000,
+    A400: #000000,
+    A700: #ffffff,
+  )
+);
+
+$gray-lighter: (
+  50: whitesmoke,
+  100: whitesmoke,
+  200: whitesmoke,
+  300: whitesmoke,
+  400: whitesmoke,
+  500: whitesmoke,
+  600: whitesmoke,
+  700: whitesmoke,
+  800: whitesmoke,
+  900: whitesmoke,
+  A100: whitesmoke,
+  A200: whitesmoke,
+  A400: whitesmoke,
+  A700: whitesmoke,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #000000,
+    500: #000000,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #000000,
+    A200: #000000,
+    A400: #000000,
+    A700: #ffffff,
+  )
+);
+
+// Define a custom typography configuration
+$custom-typography: mat.define-typography-config(
+  $font-family: 'Poppins, sans-serif'
+);
+
+// Define a custom color palette
+$custom-primary: mat.define-palette($gray-darker);
+$custom-accent: mat.define-palette($gray-lighter);
+$custom-warn: mat.define-palette(mat.$red-palette);
+
+// Create a theme, but replace the typography with our custom typography
+$app-theme: mat.define-light-theme((
+  color: (
+    primary: $custom-primary,
+    accent: $custom-accent,
+    warn: $custom-warn,
+  ),
+  typography: $custom-typography
+));
+
+// Include the default theme styles.
+@include mat.all-component-themes($app-theme);
