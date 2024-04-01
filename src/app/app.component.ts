@@ -12,10 +12,12 @@ import sv from '@angular/common/locales/sv';
 import { registerLocaleData } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 
-interface ConsumerPriceIndexData {
-  fromCpi: number;
-  toCpi: number;
-}
+interface Calculation {
+  amount: number;
+  from: Moment;
+  through: Moment
+  result: number;
+};
 
 @Component({
   selector: 'app-root',
@@ -40,7 +42,7 @@ export class AppComponent {
     from: new FormControl<Moment | null>({ value: null, disabled: true }, { validators: [Validators.required] }),
     through: new FormControl<Moment | null>({ value: null, disabled: true }, { validators: [Validators.required] }),
   });
-  public consumerPriceIndexData: ConsumerPriceIndexData | null = null;
+  public calculation: Calculation | null = null;
 
   constructor(private http: HttpClient) {
     moment.locale('sv');
@@ -78,7 +80,7 @@ export class AppComponent {
   }
 
   public handleSubmit() {
-    this.consumerPriceIndexData = null;
+    this.calculation = null;
 
     const amount = this.formGroup.controls.amount.value!;
     const from = this.formGroup.controls.from.value!;
@@ -124,9 +126,13 @@ export class AppComponent {
         }
       })
       .subscribe((response: any) => {
-        this.consumerPriceIndexData = {
-          fromCpi: response.data.at(0).values.at(0),
-          toCpi: response.data.at(1).values.at(0)
+        const throughCpi = response.data.at(1).values.at(0);
+        const fromCpi = response.data.at(0).values.at(0);
+        this.calculation = {
+          amount: amount,
+          from: from,
+          through: through,
+          result: Math.round(amount * (throughCpi / fromCpi))
         };
       });
   }
