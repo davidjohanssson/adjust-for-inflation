@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -42,9 +42,13 @@ export class AppComponent {
     from: new FormControl<Moment | null>({ value: null, disabled: true }, { validators: [Validators.required] }),
     through: new FormControl<Moment | null>({ value: null, disabled: true }, { validators: [Validators.required] }),
   });
+  @ViewChild('resultRef') resultRef: ElementRef<HTMLDivElement> | undefined;
   public calculation: Calculation | null = null;
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private elementRef: ElementRef<HTMLElement>
+  ) {
     moment.locale('sv');
     registerLocaleData(sv);
   }
@@ -128,13 +132,22 @@ export class AppComponent {
       .subscribe((response: any) => {
         const throughCpi = response.data.at(1).values.at(0);
         const fromCpi = response.data.at(0).values.at(0);
+
         this.calculation = {
           amount: amount,
           from: from,
           through: through,
           result: Math.round(amount * (throughCpi / fromCpi))
         };
+
         this.formGroup.markAsPristine();
+
+        setTimeout(() => {
+          this.elementRef.nativeElement.scrollTo({
+            top: this.elementRef.nativeElement.scrollHeight,
+            behavior: 'smooth'
+          });
+        }, 1);
       });
   }
 
