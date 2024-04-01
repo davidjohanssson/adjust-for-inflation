@@ -17,7 +17,7 @@
           #fromDatepicker
           [touchUi]="isHandset"
           startView="multi-year"
-          (monthSelected)="setMonthAndYear($event, fromDatepicker, formGroup.controls.from)"
+          (monthSelected)="setFromMonthAndYear($event, fromDatepicker)"
           disabled="false" />
       </mat-form-field>
       <mat-form-field>
@@ -28,7 +28,7 @@
           #throughDatepicker
           [touchUi]="isHandset"
           startView="multi-year"
-          (monthSelected)="setMonthAndYear($event, throughDatepicker, formGroup.controls.through)"
+          (monthSelected)="setThroughMonthAndYear($event, throughDatepicker)"
           disabled="false" />
       </mat-form-field>
     </div>

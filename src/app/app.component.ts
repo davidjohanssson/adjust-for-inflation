@@ -40,11 +40,33 @@ export class AppComponent {
     registerLocaleData(sv);
   }
 
-  public setMonthAndYear(normalizedMonthAndYear: Moment, datepickerRef: MatDatepicker<Moment>, formControl: FormControl<Moment | null>) {
+  public setFromMonthAndYear(normalizedMonthAndYear: Moment, datepickerRef: MatDatepicker<Moment>) {
     const ctrlValue = this.formGroup.controls.from.value ?? moment();
     ctrlValue.month(normalizedMonthAndYear.month());
     ctrlValue.year(normalizedMonthAndYear.year());
-    formControl.setValue(ctrlValue);
+    this.formGroup.controls.from.setValue(ctrlValue);
+
+    if (this.formGroup.controls.through.value !== null) {
+      if (ctrlValue > this.formGroup.controls.through.value) {
+        this.formGroup.controls.through.setValue(ctrlValue);
+      }
+    }
+
+    datepickerRef.close();
+  }
+
+  public setThroughMonthAndYear(normalizedMonthAndYear: Moment, datepickerRef: MatDatepicker<Moment>) {
+    const ctrlValue = this.formGroup.controls.through.value ?? moment();
+    ctrlValue.month(normalizedMonthAndYear.month());
+    ctrlValue.year(normalizedMonthAndYear.year());
+    this.formGroup.controls.through.setValue(ctrlValue);
+
+    if (this.formGroup.controls.from.value !== null) {
+      if (ctrlValue < this.formGroup.controls.from.value) {
+        this.formGroup.controls.from.setValue(ctrlValue);
+      }
+    }
+
     datepickerRef.close();
   }
 
