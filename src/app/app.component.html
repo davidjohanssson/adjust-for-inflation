@@ -1,7 +1,20 @@
 <div class="card mat-elevation-z2">
   <div class="heading">Räkna på inflation</div>
-  <div class="sub-heading">Vill du veta hur mycket 5 000 kronor från 1906 motsvarar i dagens penningvärde eller hur mycket 10 000 kronor 1990 motsvarade 1940?</div>
-  <div class="sub-heading">Med inflationskalkylatorn kan du räkna både framåt och bakåt i tiden, inom valt tidsintervall.</div>
+  <div class="sub-heading" style="margin-bottom: 16px;">Vill du veta hur mycket 5 000 kronor från 1906 motsvarar i dagens penningvärde eller hur mycket 10 000 kronor 1990 motsvarade 1940?</div>
+  <div class="sub-heading" style="margin-bottom: 32px;">Med inflationskalkylatorn kan du räkna både framåt och bakåt i tiden, inom valt tidsintervall.</div>
+  <form [formGroup]="formGroup" (ngSubmit)="handleSubmit()">
+    <mat-form-field>
+      <mat-label>Belopp</mat-label>
+      <input matInput formControlName="amount">
+      <mat-hint>t.ex. 25000</mat-hint>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Från</mat-label>
+      <input matInput [matDatepicker]="dp" formControlName="from">
+      <mat-datepicker-toggle matIconSuffix [for]="dp" />
+      <mat-datepicker #dp startView="multi-year" (monthSelected)="setMonthAndYear($event, dp)" />
+    </mat-form-field>
+  </form>
   <div class="bottom-banner">
     <a class="bottom-banner-link" mat-icon-button href="https://davidjohansson.app/" target="_blank">
       <mat-icon>home</mat-icon>
