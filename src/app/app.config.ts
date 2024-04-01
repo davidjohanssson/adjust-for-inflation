@@ -6,6 +6,7 @@ import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/mat
 import { MAT_ICON_DEFAULT_OPTIONS } from '@angular/material/icon';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import 'moment/locale/sv';
+import { provideHttpClient } from '@angular/common/http';
 
 const CUSTOM_DATE_FORMATS = {
   parse: {
@@ -22,6 +23,7 @@ const CUSTOM_DATE_FORMATS = {
 export const appConfig: ApplicationConfig = {
   providers: [
     provideAnimationsAsync(),
+    provideHttpClient(),
     provideRouter(routes),
     {
       provide: LOCALE_ID,

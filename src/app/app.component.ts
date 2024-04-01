@@ -10,6 +10,7 @@ import { default as _rollupMoment, Moment } from 'moment';
 import moment from 'moment';
 import sv from '@angular/common/locales/sv';
 import { registerLocaleData } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
@@ -30,12 +31,12 @@ export class AppComponent {
   public minDate = moment('1980-01-01');
   public maxDate = moment().subtract(2, 'months');
   public formGroup = new FormGroup({
-    amount: new FormControl<number | null>(null, { validators: [Validators.required, Validators.min(0)] }),
+    amount: new FormControl<number | null>(null, { validators: [Validators.required] }),
     from: new FormControl<Moment | null>({ value: null, disabled: true }, { validators: [Validators.required] }),
     through: new FormControl<Moment | null>({ value: null, disabled: true }, { validators: [Validators.required] }),
   });
 
-  constructor() {
+  constructor(private http: HttpClient) {
     moment.locale('sv');
     registerLocaleData(sv);
   }
@@ -71,6 +72,15 @@ export class AppComponent {
   }
 
   public handleSubmit() {
+    const amount = this.formGroup.controls.amount.value!;
+    const from = this.formGroup.controls.from.value!;
+    const through = this.formGroup.controls.through.value!;
+
+    if (amount <= 0) {
+      this.formGroup.controls.amount.setErrors({ 'amountNegative': 'Ange ett positivt belopp' });
+      return;
+    }
+
 
   }
 
