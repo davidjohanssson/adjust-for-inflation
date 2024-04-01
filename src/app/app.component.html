@@ -11,15 +11,25 @@
       </mat-form-field>
       <mat-form-field>
         <mat-label>Från</mat-label>
-        <input matInput [matDatepicker]="fromDatepicker" formControlName="from">
+        <input matInput [matDatepicker]="fromDatepicker" formControlName="from" [min]="minDate" [max]="maxDate">
         <mat-datepicker-toggle matIconSuffix [for]="fromDatepicker" />
-        <mat-datepicker #fromDatepicker [touchUi]="isHandset" startView="multi-year" (monthSelected)="setMonthAndYear($event, fromDatepicker, formGroup.controls.from)" disabled="false" />
+        <mat-datepicker 
+          #fromDatepicker
+          [touchUi]="isHandset"
+          startView="multi-year"
+          (monthSelected)="setMonthAndYear($event, fromDatepicker, formGroup.controls.from)"
+          disabled="false" />
       </mat-form-field>
       <mat-form-field>
         <mat-label>Till och med</mat-label>
-        <input matInput [matDatepicker]="throughDatepicker" formControlName="through">
+        <input matInput [matDatepicker]="throughDatepicker" formControlName="through" [min]="minDate" [max]="maxDate">
         <mat-datepicker-toggle matIconSuffix [for]="throughDatepicker" />
-        <mat-datepicker #throughDatepicker [touchUi]="isHandset" startView="multi-year" (monthSelected)="setMonthAndYear($event, throughDatepicker, formGroup.controls.through)" disabled="false" />
+        <mat-datepicker
+          #throughDatepicker
+          [touchUi]="isHandset"
+          startView="multi-year"
+          (monthSelected)="setMonthAndYear($event, throughDatepicker, formGroup.controls.through)"
+          disabled="false" />
       </mat-form-field>
     </div>
     <div class="form-button-container">

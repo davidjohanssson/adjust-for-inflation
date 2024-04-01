@@ -27,6 +27,8 @@ import { registerLocaleData } from '@angular/common';
 })
 export class AppComponent {
   public isHandset = window.matchMedia('(max-width: 599px)').matches;
+  public minDate = moment('1980-01-01');
+  public maxDate = moment().subtract(2, 'months');
   public formGroup = new FormGroup({
     amount: new FormControl<number | null>(null, { validators: [Validators.required, Validators.min(0)] }),
     from: new FormControl<Moment | null>({ value: null, disabled: true }, { validators: [Validators.required] }),
