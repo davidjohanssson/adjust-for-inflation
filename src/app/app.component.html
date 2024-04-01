@@ -1,19 +1,30 @@
 <div class="card mat-elevation-z2">
   <div class="heading">Räkna på inflation</div>
   <div class="sub-heading" style="margin-bottom: 16px;">Vill du veta hur mycket 5 000 kronor från 1906 motsvarar i dagens penningvärde eller hur mycket 10 000 kronor 1990 motsvarade 1940?</div>
-  <div class="sub-heading" style="margin-bottom: 16px;">Med inflationskalkylatorn kan du räkna både framåt och bakåt i tiden, inom valt tidsintervall.</div>
+  <div class="sub-heading" style="margin-bottom: 32px;">Med inflationskalkylatorn kan du räkna både framåt och bakåt i tiden, inom valt tidsintervall.</div>
   <form class="form" [formGroup]="formGroup" (ngSubmit)="handleSubmit()">
-    <mat-form-field>
-      <mat-label>Belopp</mat-label>
-      <input matInput formControlName="amount">
-      <mat-hint>t.ex. 25000</mat-hint>
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Från</mat-label>
-      <input matInput [matDatepicker]="dp" formControlName="from">
-      <mat-datepicker-toggle matIconSuffix [for]="dp" />
-      <mat-datepicker #dp [touchUi]="isHandset" startView="multi-year" (monthSelected)="setMonthAndYear($event, dp)" disabled="false" />
-    </mat-form-field>
+    <div class="form-fields-container">
+      <mat-form-field>
+        <mat-label>Belopp</mat-label>
+        <input matInput formControlName="amount">
+        <mat-hint>t.ex. 25000</mat-hint>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Från</mat-label>
+        <input matInput [matDatepicker]="fromDatepicker" formControlName="from">
+        <mat-datepicker-toggle matIconSuffix [for]="fromDatepicker" />
+        <mat-datepicker #fromDatepicker [touchUi]="isHandset" startView="multi-year" (monthSelected)="setMonthAndYear($event, fromDatepicker, formGroup.controls.from)" disabled="false" />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Till och med</mat-label>
+        <input matInput [matDatepicker]="throughDatepicker" formControlName="through">
+        <mat-datepicker-toggle matIconSuffix [for]="throughDatepicker" />
+        <mat-datepicker #throughDatepicker [touchUi]="isHandset" startView="multi-year" (monthSelected)="setMonthAndYear($event, throughDatepicker, formGroup.controls.through)" disabled="false" />
+      </mat-form-field>
+    </div>
+    <div class="form-button-container">
+      <button class="form-button" type="submit" mat-raised-button [disabled]="formGroup.invalid">BERÄKNA</button>
+    </div>
   </form>
   <div class="bottom-banner">
     <a class="bottom-banner-link" mat-icon-button href="https://davidjohansson.app/" target="_blank">

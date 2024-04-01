@@ -30,7 +30,22 @@
 .form {
   display: flex;
   flex-direction: column;
+  row-gap: 16px;
+}
+
+.form-fields-container {
+  display: flex;
+  flex-direction: column;
   row-gap: 8px;
+}
+
+.form-button-container {
+  display: flex;
+  justify-content: center;
+}
+
+.form-button {
+  width: 100%;
 }
 
 .bottom-banner {
@@ -84,7 +99,14 @@
 }
 
 @media (min-width: 960px) {
+  .form-fields-container {
+    flex-direction: row;
+    column-gap: 16px;
+  }
 
+  .form-button {
+    width: unset;
+  }
 }
 
 @media (min-width: 1280px) {

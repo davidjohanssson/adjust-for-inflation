@@ -30,7 +30,7 @@ export class AppComponent {
   public formGroup = new FormGroup({
     amount: new FormControl<number | null>(null, { validators: [Validators.required, Validators.min(0)] }),
     from: new FormControl<Moment | null>({ value: null, disabled: true }, { validators: [Validators.required] }),
-    // through: new FormControl()
+    through: new FormControl<Moment | null>({ value: null, disabled: true }, { validators: [Validators.required] }),
   });
 
   constructor() {
@@ -38,12 +38,12 @@ export class AppComponent {
     registerLocaleData(sv);
   }
 
-  public setMonthAndYear(normalizedMonthAndYear: Moment, datepicker: MatDatepicker<Moment>) {
+  public setMonthAndYear(normalizedMonthAndYear: Moment, datepickerRef: MatDatepicker<Moment>, formControl: FormControl<Moment | null>) {
     const ctrlValue = this.formGroup.controls.from.value ?? moment();
     ctrlValue.month(normalizedMonthAndYear.month());
     ctrlValue.year(normalizedMonthAndYear.year());
-    this.formGroup.controls.from.setValue(ctrlValue);
-    datepicker.close();
+    formControl.setValue(ctrlValue);
+    datepickerRef.close();
   }
 
   public handleSubmit() {
