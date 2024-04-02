@@ -23,7 +23,7 @@
 			</mat-form-field>
 		</div>
 		<div class="form-button-container">
-			<button class="form-button" type="submit" mat-raised-button [disabled]="!form.valid">BERÄKNA</button>
+			<button class="form-button" color="primary" type="submit" mat-raised-button [disabled]="isFormValid(form) === false">BERÄKNA</button>
 		</div>
 	</form>
 	<div class="result">

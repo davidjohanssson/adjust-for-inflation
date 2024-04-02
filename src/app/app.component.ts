@@ -1,7 +1,7 @@
 import { Component, ElementRef, HostListener } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDatepicker, MatDatepickerModule } from '@angular/material/datepicker';
@@ -73,6 +73,30 @@ export class AppComponent {
 
     datepickerRef.close();
   }
+
+	public isFormValid(form: NgForm) {
+		if (form.invalid) {
+			return false;
+		}
+
+		if (this.amount === null) {
+			return false;
+		}
+
+		if (this.amount === 0) {
+			return false;
+		}
+
+		if (this.from === null) {
+			return false;
+		}
+
+		if (this.through === null) {
+			return false;
+		}
+
+		return true;
+	}
 
   public handleSubmit() {
     this.calculation = null;
