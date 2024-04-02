@@ -1,7 +1,7 @@
-import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDatepicker, MatDatepickerModule } from '@angular/material/datepicker';
@@ -12,7 +12,7 @@ import sv from '@angular/common/locales/sv';
 import { registerLocaleData } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 
-interface Calculation {
+type Calculation = {
   amount: number;
   from: Moment;
   through: Moment
@@ -23,12 +23,12 @@ interface Calculation {
   selector: 'app-root',
   standalone: true,
   imports: [
+		FormsModule,
     MatButtonModule,
     MatDatepickerModule,
     MatFormFieldModule,
     MatIconModule,
-    MatInputModule,
-    ReactiveFormsModule
+    MatInputModule
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
@@ -37,12 +37,10 @@ export class AppComponent {
   public isHandset = window.matchMedia('(max-width: 599px)').matches;
   public minDate = moment('1980-01-01');
   public maxDate = moment().subtract(2, 'months');
-  public formGroup = new FormGroup({
-    amount: new FormControl<number | null>(null, { validators: [Validators.required] }),
-    from: new FormControl<Moment | null>({ value: null, disabled: true }, { validators: [Validators.required] }),
-    through: new FormControl<Moment | null>({ value: null, disabled: true }, { validators: [Validators.required] }),
-  });
-  @ViewChild('resultRef') resultRef: ElementRef<HTMLDivElement> | undefined;
+	public amount: number | null = null;
+	public amountError: string | null = null;
+	public from: Moment | null = null;
+	public through: Moment | null = null;
   public calculation: Calculation | null = null;
 
   constructor(
@@ -54,45 +52,40 @@ export class AppComponent {
   }
 
   public setFromMonthAndYear(normalizedMonthAndYear: Moment, datepickerRef: MatDatepicker<Moment>) {
-    const ctrlValue = this.formGroup.controls.from.value ?? moment();
-    ctrlValue.month(normalizedMonthAndYear.month());
-    ctrlValue.year(normalizedMonthAndYear.year());
-    this.formGroup.controls.from.setValue(ctrlValue);
+		this.from = moment(normalizedMonthAndYear);
 
-    if (this.formGroup.controls.through.value !== null) {
-      if (ctrlValue > this.formGroup.controls.through.value) {
-        this.formGroup.controls.through.setValue(ctrlValue);
-      }
-    }
+		if (this.through !== null) {
+			if (this.from > this.through) {
+				this.through = moment(this.from);
+			}
+		}
 
     datepickerRef.close();
   }
 
   public setThroughMonthAndYear(normalizedMonthAndYear: Moment, datepickerRef: MatDatepicker<Moment>) {
-    const ctrlValue = this.formGroup.controls.through.value ?? moment();
-    ctrlValue.month(normalizedMonthAndYear.month());
-    ctrlValue.year(normalizedMonthAndYear.year());
-    this.formGroup.controls.through.setValue(ctrlValue);
+		this.through = moment(normalizedMonthAndYear);
 
-    if (this.formGroup.controls.from.value !== null) {
-      if (ctrlValue < this.formGroup.controls.from.value) {
-        this.formGroup.controls.from.setValue(ctrlValue);
-      }
-    }
+		if (this.from !== null) {
+			if (this.through < this.from) {
+				this.from = moment(this.through);
+			}
+		}
 
     datepickerRef.close();
   }
 
   public handleSubmit() {
+		this.amountError = null;
     this.calculation = null;
 
-    const amount = this.formGroup.controls.amount.value!;
-    const from = this.formGroup.controls.from.value!;
-    const through = this.formGroup.controls.through.value!;
+    const amount = this.amount!;
+    const from = this.from!;
+    const through = this.through!;
 
     if (amount <= 0) {
-      this.formGroup.controls.amount.setErrors({ 'amountNegative': 'Ange ett positivt belopp' });
-      return;
+      this.amountError = 'Ange ett positivt belopp';
+			return;
     }
 
     const body = {
@@ -139,8 +132,6 @@ export class AppComponent {
           through: through,
           result: Math.round(amount * (throughCpi / fromCpi))
         };
-
-        this.formGroup.markAsPristine();
 
         setTimeout(() => {
           this.elementRef.nativeElement.scrollTo({

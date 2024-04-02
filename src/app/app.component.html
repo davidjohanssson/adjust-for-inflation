@@ -2,33 +2,33 @@
   <div class="heading">Räkna på inflation</div>
   <div class="sub-heading" style="margin-bottom: 16px;">Vill du veta hur mycket 5000 kronor från 1983 motsvarar i dagens penningvärde eller hur mycket 10000 kronor 2010 motsvarade 1995?</div>
   <div class="sub-heading" style="margin-bottom: 32px;">Med inflationskalkylatorn kan du räkna både framåt och bakåt i tiden, inom valt tidsintervall.</div>
-  <form class="form" [formGroup]="formGroup" (ngSubmit)="handleSubmit()">
-    <div class="form-fields-container">
-      <mat-form-field>
-        <mat-label>Belopp</mat-label>
-        <input matInput formControlName="amount">
-        <mat-hint>t.ex. 25000</mat-hint>
-        @if (formGroup.controls.amount.hasError('amountNegative')) {
-        <mat-error>{{ formGroup.controls.amount.getError('amountNegative') }}</mat-error>
-        }
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Från</mat-label>
-        <input matInput [matDatepicker]="fromDatepicker" formControlName="from" [min]="minDate" [max]="maxDate">
+  <form (ngSubmit)="handleSubmit()" #form="ngForm">
+		<div class="form-fields-container">
+			<mat-form-field>
+				<mat-label>Belopp</mat-label>
+				<input matInput [(ngModel)]="amount" name="amount" required>
+				<mat-hint>t.ex. 25000</mat-hint>
+				@if (amountError !== null) {
+					<mat-error>{{ amountError }}</mat-error>
+				}
+			</mat-form-field>
+			<mat-form-field>
+				<mat-label>Från</mat-label>
+				<input matInput [matDatepicker]="fromDatepicker" [(ngModel)]="from" name="from" [min]="minDate" [max]="maxDate" required disabled>
         <mat-datepicker-toggle matIconSuffix [for]="fromDatepicker" />
         <mat-datepicker #fromDatepicker [touchUi]="isHandset" startView="multi-year" (monthSelected)="setFromMonthAndYear($event, fromDatepicker)" disabled="false" />
-      </mat-form-field>
-      <mat-form-field>
+			</mat-form-field>
+			<mat-form-field>
         <mat-label>Till och med</mat-label>
-        <input matInput [matDatepicker]="throughDatepicker" formControlName="through" [min]="minDate" [max]="maxDate">
+        <input matInput [matDatepicker]="throughDatepicker" [(ngModel)]="through" name="through" [min]="minDate" [max]="maxDate" required disabled>
         <mat-datepicker-toggle matIconSuffix [for]="throughDatepicker" />
         <mat-datepicker #throughDatepicker [touchUi]="isHandset" startView="multi-year" (monthSelected)="setThroughMonthAndYear($event, throughDatepicker)" disabled="false" />
       </mat-form-field>
-    </div>
-    <div class="form-button-container">
-      <button class="form-button" type="submit" mat-raised-button [disabled]="formGroup.invalid || formGroup.pristine">BERÄKNA</button>
-    </div>
-  </form>
+		</div>
+		<div class="form-button-container">
+			<button class="form-button" type="submit" mat-raised-button [disabled]="!form.valid">BERÄKNA</button>
+		</div>
+	</form>
   <div class="result">
     @if (calculation !== null) {
     <div>{{ calculation.amount }} kronor {{ calculation.from.format('MMMM YYYY') }} motsvarar</div>
