@@ -38,7 +38,6 @@ export class AppComponent {
   public minDate = moment('1980-01-01');
   public maxDate = moment().subtract(2, 'months');
 	public amount: number | null = null;
-	public amountError: string | null = null;
 	public from: Moment | null = null;
 	public through: Moment | null = null;
   public calculation: Calculation | null = null;
@@ -76,17 +75,11 @@ export class AppComponent {
   }
 
   public handleSubmit() {
-		this.amountError = null;
     this.calculation = null;
 
     const amount = this.amount!;
     const from = this.from!;
     const through = this.through!;
-
-    if (amount <= 0) {
-      this.amountError = 'Ange ett positivt belopp';
-			return;
-    }
 
     const body = {
       query: [

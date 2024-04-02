@@ -8,9 +8,6 @@
 				<mat-label>Belopp</mat-label>
 				<input matInput [(ngModel)]="amount" name="amount" required>
 				<mat-hint>t.ex. 25000</mat-hint>
-				@if (amountError !== null) {
-				<mat-error>{{ amountError }}</mat-error>
-				}
 			</mat-form-field>
 			<mat-form-field>
 				<mat-label>Från</mat-label>
