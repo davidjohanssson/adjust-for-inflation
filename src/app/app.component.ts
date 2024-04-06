@@ -1,7 +1,7 @@
-import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { FormsModule, NgForm } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDatepicker, MatDatepickerModule } from '@angular/material/datepicker';
@@ -34,7 +34,6 @@ type Calculation = {
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  @ViewChild('form') form: NgForm | null = null;
   public isHandset = window.matchMedia('(max-width: 599px)').matches;
   public minDate = moment('1980-01-01');
   public maxDate = moment().subtract(2, 'months');
