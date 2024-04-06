@@ -11,6 +11,7 @@ import moment from 'moment';
 import sv from '@angular/common/locales/sv';
 import { registerLocaleData } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { lastValueFrom } from 'rxjs';
 
 type Calculation = {
   amount: number;
@@ -58,25 +59,11 @@ export class AppComponent {
 
   public setFromMonthAndYear(normalizedMonthAndYear: Moment, datepickerRef: MatDatepicker<Moment>) {
     this.from = moment(normalizedMonthAndYear);
-
-    if (this.through !== null) {
-      if (this.from > this.through) {
-        this.through = moment(this.from);
-      }
-    }
-
     datepickerRef.close();
   }
 
   public setThroughMonthAndYear(normalizedMonthAndYear: Moment, datepickerRef: MatDatepicker<Moment>) {
     this.through = moment(normalizedMonthAndYear);
-
-    if (this.from !== null) {
-      if (this.through < this.from) {
-        this.from = moment(this.through);
-      }
-    }
-
     datepickerRef.close();
   }
 
@@ -100,7 +87,7 @@ export class AppComponent {
     return true;
   }
 
-  public handleSubmit() {
+  public async handleSubmit() {
     this.isLoading = true;
     this.calculation = null;
 
@@ -108,6 +95,38 @@ export class AppComponent {
     const from = this.from!;
     const through = this.through!;
 
+    if (from.isSame(through, 'month')) {
+      this.calculation = {
+        amount: amount,
+        from: from,
+        through: through,
+        result: Math.round(amount)
+      };
+    } else {
+      const response = await this.sendRequest(from, through);
+      const fromCpi = response.data.at(0).values.at(0) as number;
+      const throughCpi = response.data.at(1).values.at(0) as number;
+
+      this.calculation = {
+        amount: amount,
+        from: from,
+        through: through,
+        result: Math.round(this.getResult(amount, from, fromCpi, through, throughCpi))
+      };
+    }
+
+    this.isLoading = false;
+
+    setTimeout(() => {
+      this.elementRef.nativeElement.scrollTo({
+        top: this.elementRef.nativeElement.scrollHeight,
+        behavior: 'smooth'
+      });
+    }, 1);
+  }
+
+  private async sendRequest(from: Moment, through: Moment) {
+    const url = 'https://api.scb.se/OV0104/v1/doris/sv/ssd/START/PR/PR0101/PR0101A/KPItotM';
     const body = {
       query: [
         {
@@ -135,32 +154,25 @@ export class AppComponent {
       }
 
     };
+    const headers = { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
+    const request = this.http.post(url, body, { headers: headers });
+    const response = await lastValueFrom(request) as any;
 
-    this.http
-      .post('https://api.scb.se/OV0104/v1/doris/sv/ssd/START/PR/PR0101/PR0101A/KPItotM', body, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-        }
-      })
-      .subscribe((response: any) => {
-        const throughCpi = response.data.at(1).values.at(0);
-        const fromCpi = response.data.at(0).values.at(0);
+    return response;
+  }
 
-        this.calculation = {
-          amount: amount,
-          from: from,
-          through: through,
-          result: Math.round(amount * (throughCpi / fromCpi))
-        };
-        this.isLoading = false;
+  private getResult(amount: number, from: Moment, fromCpi: number, through: Moment, throughCpi: number) {
+    let result: number;
 
-        setTimeout(() => {
-          this.elementRef.nativeElement.scrollTo({
-            top: this.elementRef.nativeElement.scrollHeight,
-            behavior: 'smooth'
-          });
-        }, 1);
-      });
+    if (from < through) {
+      result = amount * (throughCpi / fromCpi);
+    } else if (from > through) {
+      result = amount * (fromCpi / throughCpi);
+    } else {
+      result = amount;
+    }
+
+    return result;
   }
 
   @HostListener('window:resize', ['$event'])
