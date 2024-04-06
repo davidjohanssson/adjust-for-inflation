@@ -40,6 +40,7 @@ export class AppComponent {
 	public amount: number | null = null;
 	public from: Moment | null = null;
 	public through: Moment | null = null;
+  public isLoading = false;
   public calculation: Calculation | null = null;
 
   constructor(
@@ -104,6 +105,7 @@ export class AppComponent {
 	}
 
   public handleSubmit() {
+    this.isLoading = true;
     this.calculation = null;
 
     const amount = this.amount!;
@@ -154,6 +156,7 @@ export class AppComponent {
           through: through,
           result: Math.round(amount * (throughCpi / fromCpi))
         };
+        this.isLoading = false;
 
         setTimeout(() => {
           this.elementRef.nativeElement.scrollTo({

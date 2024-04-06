@@ -32,7 +32,7 @@
 		<div class="result-text">{{ calculation.result }}</div>
 		<div>kronor {{ calculation.through.format('MMMM YYYY') }}</div>
 		} @else {
-		<div class="result-emoji">💸</div>
+		<div class="result-emoji" [class]="isLoading ? 'spinner' : ''">💸</div>
 		}
 	</div>
 	<div class="bottom-banner">
