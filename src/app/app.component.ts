@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener } from '@angular/core';
+import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule, NgForm } from '@angular/forms';
@@ -23,7 +23,7 @@ type Calculation = {
   selector: 'app-root',
   standalone: true,
   imports: [
-		FormsModule,
+    FormsModule,
     MatButtonModule,
     MatDatepickerModule,
     MatFormFieldModule,
@@ -34,12 +34,13 @@ type Calculation = {
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+  @ViewChild('form') form: NgForm | null = null;
   public isHandset = window.matchMedia('(max-width: 599px)').matches;
   public minDate = moment('1980-01-01');
   public maxDate = moment().subtract(2, 'months');
-	public amount: number | null = null;
-	public from: Moment | null = null;
-	public through: Moment | null = null;
+  public amount: number | null = null;
+  public from: Moment | null = null;
+  public through: Moment | null = null;
   public isLoading = false;
   public calculation: Calculation | null = null;
 
@@ -57,52 +58,48 @@ export class AppComponent {
   }
 
   public setFromMonthAndYear(normalizedMonthAndYear: Moment, datepickerRef: MatDatepicker<Moment>) {
-		this.from = moment(normalizedMonthAndYear);
+    this.from = moment(normalizedMonthAndYear);
 
-		if (this.through !== null) {
-			if (this.from > this.through) {
-				this.through = moment(this.from);
-			}
-		}
+    if (this.through !== null) {
+      if (this.from > this.through) {
+        this.through = moment(this.from);
+      }
+    }
 
     datepickerRef.close();
   }
 
   public setThroughMonthAndYear(normalizedMonthAndYear: Moment, datepickerRef: MatDatepicker<Moment>) {
-		this.through = moment(normalizedMonthAndYear);
+    this.through = moment(normalizedMonthAndYear);
 
-		if (this.from !== null) {
-			if (this.through < this.from) {
-				this.from = moment(this.through);
-			}
-		}
+    if (this.from !== null) {
+      if (this.through < this.from) {
+        this.from = moment(this.through);
+      }
+    }
 
     datepickerRef.close();
   }
 
-	public isFormValid(form: NgForm) {
-		if (form.invalid) {
-			return false;
-		}
+  public isFormValid() {
+    if (this.amount === null) {
+      return false;
+    }
 
-		if (this.amount === null) {
-			return false;
-		}
+    if (this.amount === 0) {
+      return false;
+    }
 
-		if (this.amount === 0) {
-			return false;
-		}
+    if (this.from === null) {
+      return false;
+    }
 
-		if (this.from === null) {
-			return false;
-		}
+    if (this.through === null) {
+      return false;
+    }
 
-		if (this.through === null) {
-			return false;
-		}
-
-		return true;
-	}
+    return true;
+  }
 
   public handleSubmit() {
     this.isLoading = true;

@@ -6,32 +6,24 @@
 		<div class="form-fields-container">
 			<mat-form-field>
 				<mat-label>Belopp</mat-label>
-				<input matInput inputmode="numeric" [(ngModel)]="amount" name="amount" required>
+				<input matInput type="number" inputmode="numeric" [(ngModel)]="amount" name="amount">
 				<mat-hint>t.ex. 25000</mat-hint>
 			</mat-form-field>
-			<div class="form-field-container">
-				<mat-form-field (click)="openDatepicker($event, fromDatepicker)">
-					<mat-label>Från</mat-label>
-					<input matInput [matDatepicker]="fromDatepicker" [(ngModel)]="from" name="from" [min]="minDate" [max]="maxDate" required readonly tabindex="-1">
-					<mat-datepicker-toggle matIconSuffix [for]="fromDatepicker" />
-					<mat-datepicker #fromDatepicker [touchUi]="isHandset" startView="multi-year" (monthSelected)="setFromMonthAndYear($event, fromDatepicker)" disabled="false" />
-				</mat-form-field>
-			</div>
-			<!-- <mat-form-field (click)="openDatepicker($event, fromDatepicker)" subscriptSizing="dynamic" style="margin-bottom: 22px;">
+			<mat-form-field (click)="openDatepicker($event, fromDatepicker)">
 				<mat-label>Från</mat-label>
-				<input matInput [matDatepicker]="fromDatepicker" [(ngModel)]="from" name="from" [min]="minDate" [max]="maxDate" required>
+				<input matInput [matDatepicker]="fromDatepicker" [(ngModel)]="from" name="from" [min]="minDate" [max]="maxDate" readonly tabindex="-1">
 				<mat-datepicker-toggle matIconSuffix [for]="fromDatepicker" />
 				<mat-datepicker #fromDatepicker [touchUi]="isHandset" startView="multi-year" (monthSelected)="setFromMonthAndYear($event, fromDatepicker)" disabled="false" />
 			</mat-form-field>
-			<mat-form-field (click)="openDatepicker($event, throughDatepicker)" subscriptSizing="dynamic" style="margin-bottom: 22px;">
+			<mat-form-field (click)="openDatepicker($event, throughDatepicker)">
 				<mat-label>Till och med</mat-label>
-				<input matInput [matDatepicker]="throughDatepicker" [(ngModel)]="through" name="through" [min]="minDate" [max]="maxDate" required>
+				<input matInput [matDatepicker]="throughDatepicker" [(ngModel)]="through" name="through" [min]="minDate" [max]="maxDate" readonly tabindex="-1">
 				<mat-datepicker-toggle matIconSuffix [for]="throughDatepicker" />
 				<mat-datepicker #throughDatepicker [touchUi]="isHandset" startView="multi-year" (monthSelected)="setThroughMonthAndYear($event, throughDatepicker)" disabled="false" />
-			</mat-form-field> -->
+			</mat-form-field>
 		</div>
 		<div class="form-button-container">
-			<button class="form-button" color="primary" type="submit" mat-raised-button [disabled]="isFormValid(form) === false">BERÄKNA</button>
+			<button class="form-button" color="primary" type="submit" mat-raised-button [disabled]="isFormValid() === false">BERÄKNA</button>
 		</div>
 	</form>
 	<div class="result">
