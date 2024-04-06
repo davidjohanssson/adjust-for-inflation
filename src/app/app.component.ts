@@ -50,6 +50,11 @@ export class AppComponent {
     registerLocaleData(sv);
   }
 
+  public openDatepicker(event: Event, datepickerRef: MatDatepicker<Moment>) {
+    event.preventDefault();
+    datepickerRef.open();
+  }
+
   public setFromMonthAndYear(normalizedMonthAndYear: Moment, datepickerRef: MatDatepicker<Moment>) {
 		this.from = moment(normalizedMonthAndYear);
 

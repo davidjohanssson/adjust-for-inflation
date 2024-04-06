@@ -9,15 +9,15 @@
 				<input matInput inputmode="numeric" [(ngModel)]="amount" name="amount" required>
 				<mat-hint>t.ex. 25000</mat-hint>
 			</mat-form-field>
-			<mat-form-field>
+			<mat-form-field (click)="openDatepicker($event, fromDatepicker)" subscriptSizing="dynamic" style="margin-bottom: 22px;">
 				<mat-label>Från</mat-label>
-				<input matInput [matDatepicker]="fromDatepicker" [(ngModel)]="from" name="from" [min]="minDate" [max]="maxDate" required disabled>
+				<input matInput [matDatepicker]="fromDatepicker" [(ngModel)]="from" name="from" [min]="minDate" [max]="maxDate" required>
 				<mat-datepicker-toggle matIconSuffix [for]="fromDatepicker" />
 				<mat-datepicker #fromDatepicker [touchUi]="isHandset" startView="multi-year" (monthSelected)="setFromMonthAndYear($event, fromDatepicker)" disabled="false" />
 			</mat-form-field>
-			<mat-form-field>
+			<mat-form-field (click)="openDatepicker($event, throughDatepicker)" subscriptSizing="dynamic" style="margin-bottom: 22px;">
 				<mat-label>Till och med</mat-label>
-				<input matInput [matDatepicker]="throughDatepicker" [(ngModel)]="through" name="through" [min]="minDate" [max]="maxDate" required disabled>
+				<input matInput [matDatepicker]="throughDatepicker" [(ngModel)]="through" name="through" [min]="minDate" [max]="maxDate" required>
 				<mat-datepicker-toggle matIconSuffix [for]="throughDatepicker" />
 				<mat-datepicker #throughDatepicker [touchUi]="isHandset" startView="multi-year" (monthSelected)="setThroughMonthAndYear($event, throughDatepicker)" disabled="false" />
 			</mat-form-field>
